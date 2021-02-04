@@ -3,39 +3,24 @@ This file contains the description of the word puzzle problem of the assignment2
 
 ## Problem Description
 
-Bob and Alice are competitive word-search puzzle solvers. However, even to the best of Bob's abilities, he was never able to find words in the puzzles faster
-than Alice. As Bob's friend and amazing programmer, you have decided to help him out by creating a solver for word-search puzzles.
-A word-search puzzle is solved when, given a grid of random letters and a set of words, the program finds the location of the input words in the grid (if they
-exist). The orientation of the words can be horizontal, vertical, left diagonal, or right diagonal. The words can be read left to right, right to left, top to bottom
-(whether vertically or diagonally), and bottom to up (whether vertically or diagonally). Note that a diagonal can start at any index, not necessarily on a central
-diagonal.
+Bob and Alice are competitive word-search puzzle solvers. However, even to the best of Bob's abilities, he was never able to find words in the puzzles faster than Alice. As Bob's friend and amazing programmer, you have decided to help him out by creating a solver for word-search puzzles.
 
-You have decided to approach the problem using the Rabin-Karp algorithm. The Rabin-Karp algorithm uses what is called a hash function to find a substring of
-size x in a string of size y >= x.
+A word-search puzzle is solved when, given a grid of random letters and a set of words, the program finds the location of the input words in the grid (if they exist). The orientation of the words can be horizontal, vertical, left diagonal, or right diagonal. The words can be read left to right, right to left, top to bottom
+(whether vertically or diagonally), and bottom to up (whether vertically or diagonally). Note that a diagonal can start at any index, not necessarily on a central diagonal.
+
+You have decided to approach the problem using the Rabin-Karp algorithm. The Rabin-Karp algorithm uses what is called a hash function to find a substring of size x in a string of size y >= x.
 
 The hash function is applied as follows:
 
 - Decide on a prime number p.
-- For a substring of size x, the hash function multiplies the ASCII value of the first letter by p^(x-1), adds it to the ASCII value of the second letter multiplied
-by p^(x-2), and so on until the ASCII code of the last letter is multiplied by p^(0). For example, hash("hello") = 80976 with p=5 . This is
-calculated as
+- For a substring of size x, the hash function multiplies the ASCII value of the first letter by p^(x-1), adds it to the ASCII value of the second letter multiplied by p^(x-2), and so on until the ASCII code of the last letter is multiplied by p^(0). For example, `hash("hello") = 80976` with `p=5` . This is calculated as
 
-hash("hello") = h*(5^4) + e*(5^3) + l*(5^2) + l*(5^1) + o*(5^0) = 104*625 + 101*125 + 108*25 + 108*5 + 111*1 = 80976
+`hash("hello") = h*(5^4) + e*(5^3) + l*(5^2) + l*(5^1) + o*(5^0) = 104*625 + 101*125 + 108*25 + 108*5 + 111*1 = 80976`
 
-The Rabin-Karp algorithm applies this hash function to all substrings of a specific size in a given string, storing the calculated hash value for each applicable 
-index of the given string. The hash value is stored at the index corresponding to the start of the substring being hashed. The number of stored hashes depends
-on the length of the given string and the length of the substring being searched for. If the algorithm cannot make a hash value with the specified length of the
-word, it counts those positions as 0 . For example, assume the algorithm is searching for the word oworl in the string helloworld . Since the input
-word is of length 5, it will calculate the hash values of all substrings of length 5. In this case, it will calculate 10 hash values: the hash value of the word
-hello at index 0, the hash value for the word ellow at index 1, the hash value for the word llowo at index 2, the hash value for the word lowor
-at index 3, the hash value of the word oworl at index 4, the hash value of the word world at index 5, and the value 0 in indices 6-9. While searching for
-a word, if any of the values match the hash value of the given word, the algorithm has found the position of the start of the word.
+The Rabin-Karp algorithm applies this hash function to all substrings of a specific size in a given string, storing the calculated hash value for each applicable index of the given string. The hash value is stored at the index corresponding to the start of the substring being hashed. The number of stored hashes depends on the length of the given string and the length of the substring being searched for. If the algorithm cannot make a hash value with the specified length of the word, it counts those positions as `0`. For example, assume the algorithm is searching for the word `oworl` in the string `helloworld`. Since the input
+word is of length 5, it will calculate the hash values of all substrings of length 5. In this case, it will calculate 10 hash values: the hash value of the word `hello` at index 0, the hash value for the word `ellow` at index 1, the hash value for the word `llowo` at index 2, the hash value for the word `lowor` at index 3, the hash value of the word `oworl` at index 4, the hash value of the word `world` at index 5, and the value 0 in indices 6-9. While searching for a word, if any of the values match the hash value of the given word, the algorithm has found the position of the start of the word.
 
-The nice thing about Rabin-Karp is that it constructs consecutive hashes in O(1) time. This is done by taking the previous hash value, subtracting from it the
-hash value of the first letter of the previous hash, multiplying by the prime p, and adding the value of the new letter. For example, the hash value for the word
-hello with a prime p=5 is 80976. To get the hash value for the next substring of length x (x=5 in this case) ellow , we can simply remove the ASCII
-value for h (104) multiplied by p^(x-1), then multiply by p, then add the ASCII value of w (119). So the hash( ellow ) = ( 80976 - 104 * 5^(4) ) * 5 + 119 =
-79999
+The nice thing about Rabin-Karp is that it constructs consecutive hashes in O(1) time. This is done by taking the previous hash value, subtracting from it the hash value of the first letter of the previous hash, multiplying by the prime p, and adding the value of the new letter. For example, the hash value for the word `hello` with a prime p=5 is 80976. To get the hash value for the next substring of length `x` (x=5 in this case) `ellow`, we can simply remove the ASCII value for `h` (104) multiplied by p^(x-1), then multiply by `p`, then add the ASCII value of `w` (119). So the hash( ellow ) = ( 80976 - 104 * 5^(4) ) * 5 + 119 = 79999
 
 For the purposes of this assignment, you must fix p to 101.
 
@@ -57,20 +42,21 @@ Enumerate the directions as follows:
 
 
 ## How to run your program
- ./wordSearch2D -p <puzzle_file> -l <word_length> -w <wordlist_file> [-o <solution_file>]
+ `./wordSearch2D -p <puzzle_file> -l <word_length> -w <wordlist_file> [-o <solution_file>]`
 
 where:
 
-- puzzle_file is a required argument. It is preceded by the -p flag. It is a text input file that contains the puzzle grid. The provided puzzle file will
-have n lines of single strings of length n, providing an n by n square grid of letters. Each line in the file represents a row, and each line will be of same size
+- `puzzle_file` is a required argument. It is preceded by the `-p` flag. It is a text input file that contains the puzzle grid. The provided puzzle file will have n lines of single strings of length n, providing an n by n square grid of letters. Each line in the file represents a row, and each line will be of same size
 n. The positions go from 0 to n - 1 on each axis, with indices read from left to right and top to bottom. Note that 0 <= n <= 100. The puzzle file can contain
 any ASCII character with values [32, 126], not necessarily English letters only.
 
-- word_length is a required argument. It is preceded by the -l flag. It is a number in the range [1, n-1] that represents the fixed length of the words
+- `word_length` is a required argument. It is preceded by the `-l` flag. It is a number in the range [1, n-1] that represents the fixed length of the words
 the program will search for.
 
-- solution_file is an optional argument. It is the name of the text output file to which your program will write its solution. Note that the
-solution_file may not necessarily exist before your program runs. If this argument is not provided, the output should be written to a file
+- `wordlist_file` is a required argument. It is preceded by the `-w` flag. It is a text input file that contains the list of words to look for. Each word will be provided on a separate line and will have exactly `word_length` characters; otherwise, the wordlist file is invalid. The wordlist file can contain any
+ASCII character with values [32, 126], not necessarily English letters only.
+
+- `solution_file` is an optional argument. It is the name of the text output file to which your program will write its solution. Note that the `solution_file` may not necessarily exist before your program runs. If this argument is not provided, the output should be written to a file
 called output.txt . For each word in the input wordlist_file , a corresponding line will be outputted in the solution_file with the
 following format word;(y,x);d , where word is the input word, (y,x) are the coordinates of the first letter of the word in the puzzle (y is the row index 
 and x is the column index) and d is the direction of the word according to the enumerated list above. If the input word is not found in the puzzle, the output
